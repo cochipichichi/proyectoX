@@ -88,3 +88,14 @@ html{font-size:calc(16px * var(--scale))}
 /* Bigger objective title */
 .objective-title{font-size:28px;line-height:1.1;margin:0 0 8px 0}
 @media (min-width:768px){ .objective-title{font-size:32px} }
+
+
+/* Header controls */
+.header-controls{display:flex;align-items:center;gap:10px;flex-wrap:nowrap;white-space:nowrap}
+.header-controls .ctrl{display:inline-flex;align-items:center;justify-content:center;height:36px;min-width:36px;padding:0 12px;border-radius:12px;border:1px solid #22324b;background:#0b1320;color:var(--text);cursor:pointer}
+.header-controls .ctrl:hover{background:#0f1a2b}
+.header-spacer{flex:1}
+
+/* Objective title bigger */
+.objective-title{font-size:36px;line-height:1.1;margin:0 0 10px 0}
+@media (min-width:768px){ .objective-title{font-size:40px} }
