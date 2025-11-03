@@ -4,6 +4,7 @@
 <title>Quiz — Fotosíntesis</title><link rel="stylesheet" href="../css/style.css"/>
 <script type="module">
 import {saveJSON, loadJSON, ts, toCSV, download, sendMail} from "../js/utils.js";
+import {initGlobalUI, studentFieldsHTML, getStudent, sendEmailWithAttachment} from "../js/app.js";
 
 const preguntas = [
   {q:"¿En qué orgánulo ocurre principalmente la fotosíntesis?", opts:["Mitocondria","Cloroplasto","Aparato de Golgi","Lisosoma"], a:1},
@@ -33,9 +34,10 @@ function calificar(){
 }
 
 function guardar(){
+  const alumno = getStudent();
   const r = calificar();
   const data = loadJSON("quiz_data",{registros:[]});
-  data.registros.push({ts:ts(), ...r});
+  data.registros.push({ts:ts(), ...r, alumno});
   saveJSON("quiz_data", data);
   alert(`Resultado: ${r.correctas}/${r.total} (${r.pct}%)`);
 }
@@ -46,28 +48,43 @@ function exportCSV(){
   download(`quiz_${Date.now()}.csv`, csv);
 }
 
-function mail(){
+async function mail(){
   const data = loadJSON("quiz_data",{registros:[]});
   const ultimo = data.registros[data.registros.length-1] || {};
-  sendMail("[Piloto] Quiz — Fotosíntesis", JSON.stringify(ultimo,null,2));
+  try{
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    doc.text('Quiz — Proyecto X',10,10);
+    doc.text(JSON.stringify(ultimo).substring(0,1000),10,18);
+    const pdf = doc.output('datauristring');
+    await sendEmailWithAttachment('[Piloto] Quiz — Fotosíntesis', JSON.stringify(ultimo,null,2), pdf);
+    alert('Enviado con EmailJS');
+  }catch(e){ console.error(e); alert('Error al enviar con EmailJS'); }
 }
 
 window.addEventListener("DOMContentLoaded", ()=>{
+  initGlobalUI();
+  document.getElementById('studentFields').innerHTML = studentFieldsHTML();
   render();
   document.querySelector("#btnSave").addEventListener("click", guardar);
   document.querySelector("#btnCSV").addEventListener("click", exportCSV);
   document.querySelector("#btnMail").addEventListener("click", mail);
 });
 </script>
-</head>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script></head>
 <body>
-<header><div class="container"><a href="../index.html" class="btn ghost">⬅️ Volver</a> <strong style="margin-left:12px">Quiz · Fotosíntesis</strong></div></header>
+<header><div class="container"><a href="../index.html" class="btn ghost">⬅️ Volver</a> <div style="margin-left:auto" class="toolbar"><button class="btn secondary" id="btnHighContrast">⬛ Alto contraste</button><button class="btn ghost" id="btnNarrator"><span>Narrador: OFF</span></button></div> <strong style="margin-left:12px">Quiz · Fotosíntesis</strong></div></header>
 <main class="container">
-  <div class="toolbar">
+  <div class="toolbar"><script type="module">import {initGlobalUI,studentFieldsHTML,getStudent,sendEmailWithAttachment} from "../js/app.js";</script>
     <button class="btn" id="btnSave">✅ Guardar</button>
     <button class="btn secondary" id="btnCSV">✅ CSV</button>
     <button class="btn ghost" id="btnMail">✉️ Enviar</button>
   </div>
-  <div id="quiz"></div>
+  <div class="card" id="alumno_box"><h3>👤 Datos del estudiante</h3><div id="studentFields"></div></div>
+<div id="quiz"></div>
 </main>
+ <footer class="footer">
+  <div>📚<strong>© Neotech EduLab — Educación Inmersiva </strong></div>
+  <div>🛠️Prohibida su copia y/o reproduccion</div>
+  </footer>
 </body></html>

@@ -3,9 +3,9 @@
 <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>AR — Hoja y estomas</title><link rel="stylesheet" href="../css/style.css"/>
 <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
-</head>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script></head>
 <body>
-<header><div class="container"><a href="../index.html" class="btn ghost">⬅️ Volver</a> <strong style="margin-left:12px">AR — Hoja y estomas</strong></div></header>
+<header><div class="container"><a href="../index.html" class="btn ghost">⬅️ Volver</a> <div style="margin-left:auto" class="toolbar"><button class="btn secondary" id="btnHighContrast">⬛ Alto contraste</button><button class="btn ghost" id="btnNarrator"><span>Narrador: OFF</span></button></div> <strong style="margin-left:12px">AR — Hoja y estomas</strong></div></header>
 <main class="container">
   <p class="alert info">Coloca aquí tu modelo <code>assets/hoja.glb</code>. Por ahora se carga un primitivo esférico.</p>
   <model-viewer src="../assets/hoja.glb" alt="Hoja con estomas (placeholder)"
@@ -13,4 +13,9 @@
     style="width:100%;height:70vh;background:#031018;border-radius:16px">
   </model-viewer>
 </main>
+ <footer class="footer">
+  <div>📚<strong>© Neotech EduLab — Educación Inmersiva </strong></div>
+  <div>🛠️Prohibida su copia y/o reproduccion</div>
+  </footer>
+
 </body></html>

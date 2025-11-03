@@ -7,7 +7,7 @@
   <title>Proyecto X — Biología: Fotosíntesis (Plan Piloto)</title>
   <link rel="stylesheet" href="css/style.css"/>
   <meta name="theme-color" content="#0b0f14"/>
-</head>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script></head>
 <body>
 <header>
   <div class="container" style="display:flex;align-items:center;gap:14px">
@@ -16,7 +16,7 @@
       <div style="font-weight:800;font-size:18px">Plan Piloto — Proyecto X</div>
       <div style="color:#9fb3c8;font-size:13px">Biología: Fotosíntesis · PIE · TEA · 1º–2º · Fonoaudiología UBB · 3D · AR · VR</div>
     </div>
-    <div style="margin-left:auto" class="toolbar">
+    <div style="margin-left:auto" class="toolbar"><button class="btn secondary" id="btnHighContrast">⬛ Alto contraste</button><button class="btn ghost" id="btnNarrator"><span>Narrador: OFF</span></button>
       <a class="btn secondary" href="pages/oa.html">🎯 OA</a> <a class="btn secondary" href="docs/README.html">📄 Documentación</a>
       <a class="btn ghost" href="pages/kpsi.html">✅ KPSI</a>
       <a class="btn ghost" href="pages/quiz.html">🧪 Quiz</a>
@@ -71,13 +71,10 @@
   </div>
 
   <hr/>
-  <footer class="footer">
+   <footer class="footer">
   <div>📚<strong>© Neotech EduLab — Educación Inmersiva </strong></div>
   <div>🛠️Prohibida su copia y/o reproduccion</div>
   </footer>
-
-
-  
 </main>
-</body>
+<script type="module">import {initGlobalUI} from "./js/app.js"; initGlobalUI();</script></body>
 </html>

@@ -40,16 +40,37 @@ function buildQuiz(){
 }
 
 window.addEventListener("DOMContentLoaded", ()=>{
+  document.getElementById("btnPDF").addEventListener("click", async ()=>{
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    const area = document.querySelector("main");
+    const c1 = document.getElementById("kpsi");
+    const c2 = document.getElementById("quiz");
+    const img1 = c1.toDataURL("image/png");
+    const img2 = c2.toDataURL("image/png");
+    doc.text("Reporte — Proyecto X", 10, 10);
+    doc.addImage(img1, "PNG", 10, 14, 180, 80);
+    doc.addPage();
+    doc.addImage(img2, "PNG", 10, 14, 180, 80);
+    const pdf = doc.output("datauristring");
+    try{
+      await sendEmailWithAttachment("[Piloto] Reporte Dashboard", "Adjunto PDF con gráficos KPSI/Quiz.", pdf);
+      alert("Reporte enviado con EmailJS");
+    }catch(e){ console.error(e); alert("Error al enviar con EmailJS"); }
+  });
   buildKPSI();
   buildQuiz();
 });
 </script>
-</head>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script></head>
 <body>
-<header><div class="container"><a href="../index.html" class="btn ghost">⬅️ Volver</a> <strong style="margin-left:12px">Dashboard</strong></div></header>
-<main class="container grid">
+<header><div class="container"><a href="../index.html" class="btn ghost">⬅️ Volver</a> <div style="margin-left:auto" class="toolbar"><button class="btn secondary" id="btnHighContrast">⬛ Alto contraste</button><button class="btn ghost" id="btnNarrator"><span>Narrador: OFF</span></button></div> <strong style="margin-left:12px">Dashboard</strong></div></header>
+<main class="container grid"><script type="module">import {initGlobalUI, sendEmailWithAttachment} from "../js/app.js"; window.addEventListener("DOMContentLoaded", initGlobalUI);</script>
   <div class="card"><h3>✅ KPSI — promedio por registro</h3><canvas id="kpsi" height="200"></canvas></div>
   <div class="card"><h3>🧪 Quiz — % de logro</h3><canvas id="quiz" height="200"></canvas></div>
   <p class="alert ok">Interpretación: en KPSI, valores más bajos indican mayor dominio (1=mejor).</p>
-</main>
+<div class="toolbar"><button class="btn" id="btnPDF">📄 Generar PDF + Enviar</button></div></main> <footer class="footer">
+  <div>📚<strong>© Neotech EduLab — Educación Inmersiva </strong></div>
+  <div>🛠️Prohibida su copia y/o reproduccion</div>
+  </footer>
 </body></html>

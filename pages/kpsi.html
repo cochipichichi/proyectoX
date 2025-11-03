@@ -5,6 +5,7 @@
 <title>KPSI — Fotosíntesis</title><link rel="stylesheet" href="../css/style.css"/>
 <script type="module">
 import {saveJSON, loadJSON, toCSV, download, sendMail, ts} from "../js/utils.js";
+import {initGlobalUI, studentFieldsHTML, getStudent, sendEmailWithAttachment} from "../js/app.js";
 
 const scale = [
   {k:1, t:"Lo sé y puedo explicarlo a un compañero"},
@@ -48,8 +49,9 @@ function collect(){
 }
 
 function save(){
+  const alumno = getStudent();
   const data = loadJSON("kpsi_data", {registros:[]});
-  data.registros.push({
+  data.registros.push({ alumno,
     ts: ts(),
     fase: mode,
     area,
@@ -73,14 +75,27 @@ function exportCSV(){
   download(`kpsi_${Date.now()}.csv`, csv);
 }
 
-function mail(){
+async function mail(){
   const data = loadJSON("kpsi_data", {registros:[]});
   const ultimo = data.registros[data.registros.length-1];
   const body = JSON.stringify(ultimo, null, 2);
-  sendMail(`[Piloto] KPSI ${mode} — ${area}`, body);
+  try{
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    doc.text('KPSI — Proyecto X',10,10);
+    doc.text(`Fase: ${'${mode}'} · Área: ${'${area}'}`,10,18);
+    doc.text(body.substring(0,1000),10,28);
+    const pdf = doc.output('datauristring');
+    await sendEmailWithAttachment(`[Piloto] KPSI ${'${mode}'} — ${'${area}'}`, body, pdf);
+    alert('Enviado con EmailJS');
+  }catch(e){
+    console.error(e); alert('Error al enviar con EmailJS');
+  }
 }
 
 window.addEventListener("DOMContentLoaded", ()=>{
+  initGlobalUI();
+  document.getElementById('studentFields').innerHTML = studentFieldsHTML();
   render();
   document.querySelector("#fase").addEventListener("change", e=>{ mode = e.target.value; render(); });
   document.querySelector("#area").addEventListener("change", e=>{ area = e.target.value; });
@@ -89,11 +104,11 @@ window.addEventListener("DOMContentLoaded", ()=>{
   document.querySelector("#btnMail").addEventListener("click", mail);
 });
 </script>
-</head>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script></head>
 <body>
-<header><div class="container"><a href="../index.html" class="btn ghost">⬅️ Volver</a> <strong style="margin-left:12px">KPSI · Fotosíntesis</strong></div></header>
+<header><div class="container"><a href="../index.html" class="btn ghost">⬅️ Volver</a> <div style="margin-left:auto" class="toolbar"><button class="btn secondary" id="btnHighContrast">⬛ Alto contraste</button><button class="btn ghost" id="btnNarrator"><span>Narrador: OFF</span></button></div> <strong style="margin-left:12px">KPSI · Fotosíntesis</strong></div></header>
 <main class="container">
-  <div class="toolbar">
+  <div class="toolbar"><script type="module">import {initGlobalUI,studentFieldsHTML,getStudent,sendEmailWithAttachment} from "../js/app.js";</script>
     <label>Fase:
       <select id="fase">
         <option value="inicio">Inicio</option>
@@ -112,7 +127,7 @@ window.addEventListener("DOMContentLoaded", ()=>{
     <button class="btn secondary" id="btnCSV">✅ CSV</button>
     <button class="btn ghost" id="btnMail">✉️ Enviar</button>
   </div>
-
+  <div class="card" id="alumno_box" data-say="Datos del estudiante"><h3>👤 Datos del estudiante</h3><div id="studentFields"></div></div>
   <table class="table">
     <thead><tr><th>Ítem</th><th>1</th><th>2</th><th>3</th><th>4</th></tr></thead>
     <tbody></tbody>
@@ -120,5 +135,9 @@ window.addEventListener("DOMContentLoaded", ()=>{
 
   <p class="alert info">Escala: 1=Lo sé y puedo explicarlo · 2=No estoy seguro · 3=No lo entiendo · 4=No lo sé</p>
 </main>
+ <footer class="footer">
+  <div>📚<strong>© Neotech EduLab — Educación Inmersiva </strong></div>
+  <div>🛠️Prohibida su copia y/o reproduccion</div>
+  </footer>
 </body>
 </html>
