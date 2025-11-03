@@ -73,30 +73,4 @@ window.addEventListener("DOMContentLoaded", ()=>{
   <div>📚<strong>© Neotech EduLab — Educación Inmersiva </strong></div>
   <div>🛠️Prohibida su copia y/o reproduccion</div>
   </footer>
-<script type="module">import {initGlobalUI} from "../js/app.js"; initGlobalUI();</script>
-<script>
-// Fallback for local file:// where ES modules may be blocked
-(function(){
-  function inject(){
-    var container = document.querySelector("header .container");
-    if(!container) return;
-    if(container.querySelector(".header-controls")) return;
-    var bar = document.createElement("div");
-    bar.className = "header-controls";
-    bar.innerHTML = '<div class="header-spacer"></div>' +
-      '<a class="ctrl" href="index.html" title="Inicio">🏠</a>' +
-      '<button class="ctrl" title="Narrador" onclick="window._tts=!window._tts; try{var u=new SpeechSynthesisUtterance(window._tts?\'Narrador activado\':\'Narrador desactivado\'); u.lang=\'es-CL\'; speechSynthesis.cancel(); speechSynthesis.speak(u);}catch(e){}">🗣️</button>' +
-      '<button class="ctrl" title="Claro/Oscuro" onclick="document.documentElement.classList.toggle(\'light\')">🌓</button>' +
-      '<button class="ctrl" title="Aumentar letra" onclick="(function(){var r=document.documentElement;var s=parseFloat(getComputedStyle(r).getPropertyValue(\'--scale\')||\'1\');r.style.setProperty(\'--scale\', String(Math.min(1.6,s+0.1)));})();">A+</button>' +
-      '<button class="ctrl" title="Disminuir letra" onclick="(function(){var r=document.documentElement;var s=parseFloat(getComputedStyle(r).getPropertyValue(\'--scale\')||\'1\');r.style.setProperty(\'--scale\', String(Math.max(0.8,s-0.1)));})();">A−</button>' +
-      '<button class="ctrl" title="Idioma" onclick="alert(\'Idioma (placeholder)\')">🌐</button>' +
-      '<button class="ctrl" title="Accesibilidad" onclick="document.documentElement.classList.toggle(\'hc\')">🧠</button>' +
-      '<button class="ctrl" title="Buscar" onclick="(function(){var q=prompt(\'Buscar:\'); if(!q) return; document.querySelectorAll(\'.card,h2,h3\').forEach(function(el){var t=(el.innerText||\'\').toLowerCase(); el.style.outline=t.includes(q.toLowerCase())?\'2px solid var(--accent-2)\':\'\'; el.style.opacity=t.includes(q.toLowerCase())?\'1\':\'0.4\';});})();">🔍</button>';
-    container.appendChild(bar);
-  }
-  if(document.readyState!=="loading") inject();
-  else document.addEventListener("DOMContentLoaded", inject);
-})();
-</script>
-
-</body></html>
+<script type="module">import {initGlobalUI} from "../js/app.js"; initGlobalUI();</script></body></html>
