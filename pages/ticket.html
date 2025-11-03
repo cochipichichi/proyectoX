@@ -1,0 +1,52 @@
+
+<!doctype html><html lang="es"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Ticket de salida</title><link rel="stylesheet" href="../css/style.css"/>
+<script type="module">
+import {saveJSON, loadJSON, ts, toCSV, download, sendMail} from "../js/utils.js";
+
+function guardar(){
+  const r = {
+    ts: ts(),
+    "1_Cosas que aprendí hoy": document.querySelector("#p1").value,
+    "2_Duda que me quedó": document.querySelector("#p2").value,
+    "3_Qué haré distinto la próxima clase": document.querySelector("#p3").value
+  };
+  const data = loadJSON("ticket_data",{registros:[]});
+  data.registros.push(r);
+  saveJSON("ticket_data", data);
+  alert("Guardado ✓");
+}
+
+function exportCSV(){
+  const data = loadJSON("ticket_data",{registros:[]});
+  const csv = toCSV(data.registros);
+  download(`ticket_${Date.now()}.csv`, csv);
+}
+
+function mail(){
+  const data = loadJSON("ticket_data",{registros:[]});
+  const ultimo = data.registros[data.registros.length-1] || {};
+  sendMail("[Piloto] Ticket de salida", JSON.stringify(ultimo,null,2));
+}
+
+window.addEventListener("DOMContentLoaded", ()=>{
+  document.querySelector("#btnSave").addEventListener("click", guardar);
+  document.querySelector("#btnCSV").addEventListener("click", exportCSV);
+  document.querySelector("#btnMail").addEventListener("click", mail);
+});
+</script>
+</head>
+<body>
+<header><div class="container"><a href="../index.html" class="btn ghost">⬅️ Volver</a> <strong style="margin-left:12px">Ticket de salida</strong></div></header>
+<main class="container grid">
+  <div class="card"><label>1) ¿Qué aprendí hoy?<textarea id="p1" rows="4"></textarea></label></div>
+  <div class="card"><label>2) ¿Qué duda me quedó?<textarea id="p2" rows="4"></textarea></label></div>
+  <div class="card"><label>3) ¿Qué haré distinto la próxima clase?<textarea id="p3" rows="4"></textarea></label></div>
+  <div class="toolbar">
+    <button class="btn" id="btnSave">✅ Guardar</button>
+    <button class="btn secondary" id="btnCSV">✅ CSV</button>
+    <button class="btn ghost" id="btnMail">✉️ Enviar</button>
+  </div>
+</main>
+</body></html>

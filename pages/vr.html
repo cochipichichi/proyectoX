@@ -1,0 +1,22 @@
+
+<!doctype html><html lang="es"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>VR — Cloroplasto</title><link rel="stylesheet" href="../css/style.css"/>
+<script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+</head>
+<body>
+<header><div class="container"><a href="../index.html" class="btn ghost">⬅️ Volver</a> <strong style="margin-left:12px">VR — Cloroplasto</strong></div></header>
+<main class="container">
+  <p class="alert info">Mueve la cabeza o arrastra con el mouse. En dispositivos compatibles: entra en modo VR.</p>
+  <div style="height:70vh;border-radius:16px;overflow:hidden">
+    <a-scene background="color: #031018">
+      <a-entity position="0 1.6 0">
+        <a-camera wasd-controls-enabled="true"></a-camera>
+      </a-entity>
+      <a-sphere position="0 1.6 -3" radius="1" color="#00e676"></a-sphere>
+      <a-text value="Cloroplasto (placeholder)" color="#e6f1ff" position="-1 0.5 -2.5"></a-text>
+      <a-sky color="#02101a"></a-sky>
+    </a-scene>
+  </div>
+</main>
+</body></html>

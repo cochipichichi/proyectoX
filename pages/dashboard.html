@@ -1,0 +1,55 @@
+
+<!doctype html><html lang="es"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Dashboard</title><link rel="stylesheet" href="../css/style.css"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="module">
+import {loadJSON} from "../js/utils.js";
+
+function promedio(vals){
+  const nums = Object.values(vals).map(Number).filter(v=>!isNaN(v)&&v>0);
+  if(!nums.length) return 0;
+  return nums.reduce((a,b)=>a+b,0)/nums.length;
+}
+
+function buildKPSI(){
+  const d = loadJSON("kpsi_data",{registros:[]}).registros;
+  const inicio = d.filter(r=>r.fase==="inicio");
+  const fin = d.filter(r=>r.fase==="fin");
+  const mInicio = inicio.map(r=>promedio(r.vals));
+  const mFin = fin.map(r=>promedio(r.vals));
+  const labels = [...Array(Math.max(mInicio.length, mFin.length)).keys()].map(i=>`R${i+1}`);
+
+  const ctx = document.getElementById("kpsi").getContext("2d");
+  new Chart(ctx, {
+    type:"line",
+    data:{labels, datasets:[
+      {label:"KPSI Inicio (promedio menor=mejor)", data:mInicio},
+      {label:"KPSI Fin (promedio menor=mejor)", data:mFin}
+    ]},
+    options:{responsive:true}
+  });
+}
+
+function buildQuiz(){
+  const d = loadJSON("quiz_data",{registros:[]}).registros;
+  const labels = d.map(r=>new Date(r.ts).toLocaleString());
+  const data = d.map(r=>r.pct);
+  const ctx = document.getElementById("quiz").getContext("2d");
+  new Chart(ctx, {type:"bar", data:{labels, datasets:[{label:"% Quiz", data}]}, options:{responsive:true}});
+}
+
+window.addEventListener("DOMContentLoaded", ()=>{
+  buildKPSI();
+  buildQuiz();
+});
+</script>
+</head>
+<body>
+<header><div class="container"><a href="../index.html" class="btn ghost">⬅️ Volver</a> <strong style="margin-left:12px">Dashboard</strong></div></header>
+<main class="container grid">
+  <div class="card"><h3>✅ KPSI — promedio por registro</h3><canvas id="kpsi" height="200"></canvas></div>
+  <div class="card"><h3>🧪 Quiz — % de logro</h3><canvas id="quiz" height="200"></canvas></div>
+  <p class="alert ok">Interpretación: en KPSI, valores más bajos indican mayor dominio (1=mejor).</p>
+</main>
+</body></html>

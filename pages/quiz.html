@@ -1,0 +1,73 @@
+
+<!doctype html><html lang="es"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Quiz — Fotosíntesis</title><link rel="stylesheet" href="../css/style.css"/>
+<script type="module">
+import {saveJSON, loadJSON, ts, toCSV, download, sendMail} from "../js/utils.js";
+
+const preguntas = [
+  {q:"¿En qué orgánulo ocurre principalmente la fotosíntesis?", opts:["Mitocondria","Cloroplasto","Aparato de Golgi","Lisosoma"], a:1},
+  {q:"¿Qué gas ingresa a la planta para producir glucosa?", opts:["Oxígeno","Hidrógeno","Dióxido de carbono (CO₂)","Nitrógeno"], a:2},
+  {q:"¿Cuál es el producto principal de la fase oscura (Ciclo de Calvin)?", opts:["ATP","NADPH","Oxígeno","Glucosa"], a:3}
+];
+
+function render(){
+  const wrap = document.querySelector("#quiz");
+  wrap.innerHTML = "";
+  preguntas.forEach((p,i)=>{
+    const div = document.createElement("div");
+    div.className = "card";
+    div.innerHTML = `<p><b>${i+1}.</b> ${p.q}</p>` +
+      p.opts.map((o,j)=>`<label class="toggle"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join("<br/>");
+    wrap.appendChild(div);
+  });
+}
+
+function calificar(){
+  let correctas = 0;
+  preguntas.forEach((p,i)=>{
+    const v = document.querySelector(`input[name='q${i}']:checked`);
+    if(v && Number(v.value)===p.a) correctas++;
+  });
+  return {total:preguntas.length, correctas, pct: Math.round(100*correctas/preguntas.length)};
+}
+
+function guardar(){
+  const r = calificar();
+  const data = loadJSON("quiz_data",{registros:[]});
+  data.registros.push({ts:ts(), ...r});
+  saveJSON("quiz_data", data);
+  alert(`Resultado: ${r.correctas}/${r.total} (${r.pct}%)`);
+}
+
+function exportCSV(){
+  const data = loadJSON("quiz_data",{registros:[]});
+  const csv = toCSV(data.registros);
+  download(`quiz_${Date.now()}.csv`, csv);
+}
+
+function mail(){
+  const data = loadJSON("quiz_data",{registros:[]});
+  const ultimo = data.registros[data.registros.length-1] || {};
+  sendMail("[Piloto] Quiz — Fotosíntesis", JSON.stringify(ultimo,null,2));
+}
+
+window.addEventListener("DOMContentLoaded", ()=>{
+  render();
+  document.querySelector("#btnSave").addEventListener("click", guardar);
+  document.querySelector("#btnCSV").addEventListener("click", exportCSV);
+  document.querySelector("#btnMail").addEventListener("click", mail);
+});
+</script>
+</head>
+<body>
+<header><div class="container"><a href="../index.html" class="btn ghost">⬅️ Volver</a> <strong style="margin-left:12px">Quiz · Fotosíntesis</strong></div></header>
+<main class="container">
+  <div class="toolbar">
+    <button class="btn" id="btnSave">✅ Guardar</button>
+    <button class="btn secondary" id="btnCSV">✅ CSV</button>
+    <button class="btn ghost" id="btnMail">✉️ Enviar</button>
+  </div>
+  <div id="quiz"></div>
+</main>
+</body></html>

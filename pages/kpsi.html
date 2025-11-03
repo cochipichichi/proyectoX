@@ -1,0 +1,124 @@
+
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>KPSI — Fotosíntesis</title><link rel="stylesheet" href="../css/style.css"/>
+<script type="module">
+import {saveJSON, loadJSON, toCSV, download, sendMail, ts} from "../js/utils.js";
+
+const scale = [
+  {k:1, t:"Lo sé y puedo explicarlo a un compañero"},
+  {k:2, t:"No estoy seguro, no podría explicárselo"},
+  {k:3, t:"No lo entiendo"},
+  {k:4, t:"No lo sé"}
+];
+
+const items = [
+  {id:"fot_concepto", txt:"Explico qué es la fotosíntesis y su ecuación general"},
+  {id:"fot_cloroplasto", txt:"Identifico cloroplastos, tilacoides y estroma"},
+  {id:"fot_luz", txt:"Diferencio fase luminosa y oscura (Ciclo de Calvin)"},
+  {id:"fot_gases", txt:"Relaciono intercambio de CO₂/O₂ con estomas"},
+  {id:"fot_factores", txt:"Predigo cómo luz, CO₂ y temperatura afectan tasa fotosintética"},
+  {id:"fot_energia", txt:"Describo flujo de energía: luz → ATP/NADPH → glucosa"}
+];
+
+let mode = "inicio"; // or "fin"
+let area = "PIE"; // PIE, TEA, 1-2, Fono
+
+function render(){
+  document.querySelector("#when").textContent = mode === "inicio" ? "Inicio" : "Fin";
+  const tbody = document.querySelector("tbody");
+  tbody.innerHTML = "";
+  for(const it of items){
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${it.txt}</td>` + scale.map(s => 
+      `<td><label class="toggle"><input type="radio" name="${it.id}" value="${s.k}"><span>${s.k}</span></label></td>`
+    ).join("");
+    tbody.appendChild(tr);
+  }
+}
+
+function collect(){
+  const vals = {};
+  for(const it of items){
+    const v = document.querySelector(`input[name='${it.id}']:checked`);
+    vals[it.id] = v ? Number(v.value) : "";
+  }
+  return vals;
+}
+
+function save(){
+  const data = loadJSON("kpsi_data", {registros:[]});
+  data.registros.push({
+    ts: ts(),
+    fase: mode,
+    area,
+    vals: collect()
+  });
+  saveJSON("kpsi_data", data);
+  alert("Guardado ✓");
+}
+
+function exportCSV(){
+  const data = loadJSON("kpsi_data", {registros:[]});
+  const rows = [];
+  for(const r of data.registros){
+    const base = {timestamp:r.ts, fase:r.fase, area:r.area};
+    for(const it of items){
+      base[it.id] = r.vals[it.id] ?? "";
+    }
+    rows.push(base);
+  }
+  const csv = toCSV(rows);
+  download(`kpsi_${Date.now()}.csv`, csv);
+}
+
+function mail(){
+  const data = loadJSON("kpsi_data", {registros:[]});
+  const ultimo = data.registros[data.registros.length-1];
+  const body = JSON.stringify(ultimo, null, 2);
+  sendMail(`[Piloto] KPSI ${mode} — ${area}`, body);
+}
+
+window.addEventListener("DOMContentLoaded", ()=>{
+  render();
+  document.querySelector("#fase").addEventListener("change", e=>{ mode = e.target.value; render(); });
+  document.querySelector("#area").addEventListener("change", e=>{ area = e.target.value; });
+  document.querySelector("#btnSave").addEventListener("click", save);
+  document.querySelector("#btnCSV").addEventListener("click", exportCSV);
+  document.querySelector("#btnMail").addEventListener("click", mail);
+});
+</script>
+</head>
+<body>
+<header><div class="container"><a href="../index.html" class="btn ghost">⬅️ Volver</a> <strong style="margin-left:12px">KPSI · Fotosíntesis</strong></div></header>
+<main class="container">
+  <div class="toolbar">
+    <label>Fase:
+      <select id="fase">
+        <option value="inicio">Inicio</option>
+        <option value="fin">Fin</option>
+      </select>
+    </label>
+    <label>Área:
+      <select id="area">
+        <option>PIE</option>
+        <option>TEA</option>
+        <option>1-2</option>
+        <option>Fono</option>
+      </select>
+    </label>
+    <button class="btn" id="btnSave">✅ Guardar</button>
+    <button class="btn secondary" id="btnCSV">✅ CSV</button>
+    <button class="btn ghost" id="btnMail">✉️ Enviar</button>
+  </div>
+
+  <table class="table">
+    <thead><tr><th>Ítem</th><th>1</th><th>2</th><th>3</th><th>4</th></tr></thead>
+    <tbody></tbody>
+  </table>
+
+  <p class="alert info">Escala: 1=Lo sé y puedo explicarlo · 2=No estoy seguro · 3=No lo entiendo · 4=No lo sé</p>
+</main>
+</body>
+</html>
