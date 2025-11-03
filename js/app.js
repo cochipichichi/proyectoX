@@ -7,13 +7,24 @@ export const AppState = {
 };
 
 export function initGlobalUI(){
-  // High contrast toggle
-  const hc = document.querySelector("#btnHighContrast");
-  if(hc){
-    hc.addEventListener("click", ()=>{
-      AppState.highContrast = !AppState.highContrast;
-      document.documentElement.classList.toggle("hc", AppState.highContrast);
-    });
+  // saved prefs
+  const s = parseFloat(localStorage.getItem("font_scale") || "1");
+  document.documentElement.style.setProperty("--scale", String(s));
+  if(localStorage.getItem("theme_light")==="1"){
+    document.documentElement.classList.add("light");
+  }
+  // mount controls (index has ./js, pages use ../js)
+  const isIndex = location.pathname.endsWith("/index.html") || location.pathname === "/" || location.pathname === "";
+  renderHeaderControls(isIndex ? "index.html" : "../index.html");
+  // click-to-speak remains
+  document.addEventListener("click", e=>{
+    const el = e.target.closest("[data-say]");
+    if(!el || !AppState.ttsEnabled) return;
+    const u = new SpeechSynthesisUtterance((el.getAttribute("data-say")||el.textContent||"").trim());
+    u.lang = "es-CL"; speechSynthesis.cancel(); speechSynthesis.speak(u);
+  });
+}
+);
   }
   // Narrator (Web Speech API)
   const narr = document.querySelector("#btnNarrator");
@@ -189,8 +200,20 @@ export function renderHeaderControls(hrefHome="../index.html"){
   });}
 }
 export function initGlobalUI(){
-  applySavedTheme();
-  applySavedFontScale();
-  const isIndex = location.pathname.endsWith("/index.html") || location.pathname == "/" || location.pathname == "";
+  // saved prefs
+  const s = parseFloat(localStorage.getItem("font_scale") || "1");
+  document.documentElement.style.setProperty("--scale", String(s));
+  if(localStorage.getItem("theme_light")==="1"){
+    document.documentElement.classList.add("light");
+  }
+  // mount controls (index has ./js, pages use ../js)
+  const isIndex = location.pathname.endsWith("/index.html") || location.pathname === "/" || location.pathname === "";
   renderHeaderControls(isIndex ? "index.html" : "../index.html");
+  // click-to-speak remains
+  document.addEventListener("click", e=>{
+    const el = e.target.closest("[data-say]");
+    if(!el || !AppState.ttsEnabled) return;
+    const u = new SpeechSynthesisUtterance((el.getAttribute("data-say")||el.textContent||"").trim());
+    u.lang = "es-CL"; speechSynthesis.cancel(); speechSynthesis.speak(u);
+  });
 }
