@@ -50,3 +50,30 @@ hr{border:0;border-top:1px solid #162133;margin:16px 0}
 .hc input,.hc select,.hc textarea{background:#000;color:#fff;border:2px solid #fff}
 .hc .btn{background:#fff;color:#000;border:2px solid #000}
 .hc .btn.ghost{border:2px dashed #fff;color:#fff;background:transparent}
+
+
+/* === Header controls (top-right neat single row) === */
+.header-controls{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;white-space:nowrap}
+.header-controls .ctrl{display:inline-flex;align-items:center;justify-content:center;height:36px;min-width:36px;padding:0 10px;border-radius:12px;border:1px solid #22324b;background:#0b1320;color:var(--text);cursor:pointer}
+.header-controls .ctrl:hover{background:#0f1a2b}
+.header-spacer{flex:1}
+
+/* Light theme support */
+.light body{background:#f7fbff;color:#0b0f14}
+.light .card{background:#fff;border-color:#e5eef9;box-shadow:0 6px 16px rgba(0,0,0,.08)}
+.light .btn.secondary{background:#eef5ff;color:#0b0f14;border:1px solid #d7e6ff}
+.light .btn.ghost{color:#0b0f14;border-color:#cfe0ff}
+
+/* Font scaling */
+:root{--scale:1}
+html{font-size:calc(16px * var(--scale))}
+
+/* Accessibility panel */
+#accessPanel{position:fixed;top:64px;right:16px;width:320px;background:var(--card);border:1px solid #22324b;border-radius:16px;padding:12px;box-shadow:0 10px 28px rgba(0,0,0,.35);display:none;z-index:70}
+#accessPanel.show{display:block}
+#accessPanel h4{margin:6px 0 10px 0}
+#accessPanel .row{display:flex;gap:8px;flex-wrap:wrap}
+
+/* Bigger objective title */
+.objective-title{font-size:28px;line-height:1.1;margin:0 0 8px 0}
+@media (min-width:768px){ .objective-title{font-size:32px} }

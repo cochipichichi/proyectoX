@@ -106,7 +106,7 @@ window.addEventListener("DOMContentLoaded", ()=>{
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script></head>
 <body>
-<header><div class="container"><a href="../index.html" class="btn ghost">⬅️ Volver</a> <div style="margin-left:auto" class="toolbar"><button class="btn secondary" id="btnHighContrast">⬛ Alto contraste</button><button class="btn ghost" id="btnNarrator"><span>Narrador: OFF</span></button></div> <strong style="margin-left:12px">KPSI · Fotosíntesis</strong></div></header>
+<header><div class="container"><a href="../index.html" class="btn ghost">⬅️ Volver</a>  <strong style="margin-left:12px">KPSI · Fotosíntesis</strong></div></header>
 <main class="container">
   <div class="toolbar"><script type="module">import {initGlobalUI,studentFieldsHTML,getStudent,sendEmailWithAttachment} from "../js/app.js";</script>
     <label>Fase:
@@ -139,5 +139,5 @@ window.addEventListener("DOMContentLoaded", ()=>{
   <div>📚<strong>© Neotech EduLab — Educación Inmersiva </strong></div>
   <div>🛠️Prohibida su copia y/o reproduccion</div>
   </footer>
-</body>
+<script type="module">import {initGlobalUI} from "../js/app.js"; initGlobalUI();</script></body>
 </html>
