@@ -14,7 +14,7 @@
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,Segoe UI,Roboto,Arial,Helvetica,sans-serif}
 a{color:var(--accent-2);text-decoration:none}
-header{position:sticky;top:0;background:rgba(11,15,20,.85);backdrop-filter:blur(8px);border-bottom:1px solid #162133;z-index:50}
+header{position:sticky;top:0;background:rgba(8,12,18,.92);backdrop-filter:blur(10px) saturate(120%);-webkit-backdrop-filter:blur(10px) saturate(120%);border-bottom:1px solid #1d2a3d;z-index:1000;box-shadow:0 8px 24px rgba(0,0,0,.35)}
 .container{max-width:1200px;margin:0 auto;padding:16px}
 .grid{display:grid;gap:16px}
 .grid.cards{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
@@ -54,7 +54,7 @@ hr{border:0;border-top:1px solid #162133;margin:16px 0}
 
 /* === Header controls (top-right neat single row) === */
 .header-controls{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;white-space:nowrap}
-.header-controls .ctrl{display:inline-flex;align-items:center;justify-content:center;height:36px;min-width:36px;padding:0 10px;border-radius:12px;border:1px solid #22324b;background:#0b1320;color:var(--text);cursor:pointer}
+.header-controls .ctrl{box-shadow:0 1px 0 rgba(255,255,255,.03) inset, 0 0 0 0 rgba(0,0,0,0);transition:box-shadow .2s ease, background .2s ease;display:inline-flex;align-items:center;justify-content:center;height:36px;min-width:36px;padding:0 10px;border-radius:12px;border:1px solid #22324b;background:#0b1320;color:var(--text);cursor:pointer}
 .header-controls .ctrl:hover{background:#0f1a2b}
 .header-spacer{flex:1}
 
@@ -81,7 +81,7 @@ html{font-size:calc(16px * var(--scale))}
 
 /* Header controls */
 .header-controls{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;white-space:nowrap}
-.header-controls .ctrl{display:inline-flex;align-items:center;justify-content:center;height:36px;min-width:36px;padding:0 10px;border-radius:12px;border:1px solid #22324b;background:#0b1320;color:var(--text);cursor:pointer}
+.header-controls .ctrl{box-shadow:0 1px 0 rgba(255,255,255,.03) inset, 0 0 0 0 rgba(0,0,0,0);transition:box-shadow .2s ease, background .2s ease;display:inline-flex;align-items:center;justify-content:center;height:36px;min-width:36px;padding:0 10px;border-radius:12px;border:1px solid #22324b;background:#0b1320;color:var(--text);cursor:pointer}
 .header-controls .ctrl:hover{background:#0f1a2b}
 .header-spacer{flex:1}
 
@@ -96,3 +96,5 @@ footer, footer .container, footer .container *{
   justify-content:center !important;
 }
 footer .container{display:flex; flex-direction:column; align-items:center; gap:6px}
+
+.header-controls .ctrl:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(0,176,255,.5)}
