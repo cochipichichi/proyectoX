@@ -207,43 +207,6 @@ export function renderHeaderControls(hrefHome="../index.html"){
 export function fontScale(d){const cur=parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--scale")||"1");let n=Math.min(1.6,Math.max(0.8,cur+d));document.documentElement.style.setProperty("--scale",String(n));localStorage.setItem("font_scale",String(n));}
 export function toggleTheme(){document.documentElement.classList.toggle("light");localStorage.setItem("theme_light",document.documentElement.classList.contains("light")?"1":"0");}
 export function applySavedPrefs(){const s=parseFloat(localStorage.getItem("font_scale")||"1");document.documentElement.style.setProperty("--scale",String(s));if(localStorage.getItem("theme_light")==="1"){document.documentElement.classList.add("light");}}
-export function renderHeaderControls(hrefHome="../index.html"){
-  const c=document.querySelector("header .container"); if(!c) return;
-  const old=c.querySelector(".header-controls"); if(old) old.remove();
-  let home=hrefHome; if(location.pathname.endsWith("/index.html")||location.pathname.endsWith("/")) home="index.html";
-  const bar=document.createElement("div"); bar.className="header-controls";
-  bar.innerHTML = `
-    <div class="header-spacer"></div>
-    <a class="ctrl" href="${home}" title="Inicio" data-say="Inicio">🏠</a>
-    <button class="ctrl" id="ctrlVoice" title="Narrador" data-say="Narrador">🗣️</button>
-    <button class="ctrl" id="ctrlTheme" title="Claro/Oscuro" data-say="Claro oscuro">🌓</button>
-    <button class="ctrl" id="ctrlAPlus" title="Aumentar letra" data-say="Aumentar letra">A+</button>
-    <button class="ctrl" id="ctrlAMinus" title="Disminuir letra" data-say="Disminuir letra">A−</button>
-    <button class="ctrl" id="ctrlLang" title="Idioma" data-say="Idioma">🌐</button>
-    <button class="ctrl" id="ctrlAccess" title="Accesibilidad" data-say="Accesibilidad">🧠</button>
-    <button class="ctrl" id="ctrlSearch" title="Buscar" data-say="Buscar">🔍</button>
-  `;
-  c.appendChild(bar);
-
-  document.getElementById("ctrlVoice").addEventListener("click", ()=>{
-    window.AppState = window.AppState || {ttsEnabled:false};
-    AppState.ttsEnabled = !AppState.ttsEnabled;
-    try{ const u=new SpeechSynthesisUtterance(AppState.ttsEnabled? "Narrador activado":"Narrador desactivado"); u.lang="es-CL"; speechSynthesis.cancel(); speechSynthesis.speak(u);}catch(e){}
-  });
-  document.getElementById("ctrlTheme").addEventListener("click", toggleTheme);
-  document.getElementById("ctrlAPlus").addEventListener("click", ()=>fontScale(0.1));
-  document.getElementById("ctrlAMinus").addEventListener("click", ()=>fontScale(-0.1));
-  document.getElementById("ctrlLang").addEventListener("click", ()=>alert("Idioma (placeholder)"));
-  document.getElementById("ctrlAccess").addEventListener("click", ()=>document.documentElement.classList.toggle("hc"));
-  document.getElementById("ctrlSearch").addEventListener("click", ()=>{
-    const q=prompt("Buscar (filtra tarjetas/encabezados):"); if(!q) return;
-    document.querySelectorAll(".card,h2,h3").forEach(el=>{
-      const t=(el.innerText||'').toLowerCase();
-      el.style.outline=t.includes(q.toLowerCase())?"2px solid var(--accent-2)":"";
-      el.style.opacity=t.includes(q.toLowerCase())?"1":"0.35";
-    });
-  });
-}
 export function initGlobalUI(){
   applySavedPrefs();
   const isIndex = location.pathname.endsWith("/index.html") || location.pathname === "/" || location.pathname === "";
