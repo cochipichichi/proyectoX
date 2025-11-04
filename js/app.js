@@ -199,21 +199,3 @@ export function renderHeaderControls(hrefHome="../index.html"){
     localStorage.removeItem("theme_light");
   });}
 }
-export function initGlobalUI(){
-  // saved prefs
-  const s = parseFloat(localStorage.getItem("font_scale") || "1");
-  document.documentElement.style.setProperty("--scale", String(s));
-  if(localStorage.getItem("theme_light")==="1"){
-    document.documentElement.classList.add("light");
-  }
-  // mount controls (index has ./js, pages use ../js)
-  const isIndex = location.pathname.endsWith("/index.html") || location.pathname === "/" || location.pathname === "";
-  renderHeaderControls(isIndex ? "index.html" : "../index.html");
-  // click-to-speak remains
-  document.addEventListener("click", e=>{
-    const el = e.target.closest("[data-say]");
-    if(!el || !AppState.ttsEnabled) return;
-    const u = new SpeechSynthesisUtterance((el.getAttribute("data-say")||el.textContent||"").trim());
-    u.lang = "es-CL"; speechSynthesis.cancel(); speechSynthesis.speak(u);
-  });
-}
