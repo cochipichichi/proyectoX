@@ -134,6 +134,22 @@ window.addEventListener("DOMContentLoaded", ()=>{
   </table>
 
   <p class="alert info">Escala: 1=Lo sé y puedo explicarlo · 2=No estoy seguro · 3=No lo entiendo · 4=No lo sé</p>
+  <p>Aplica KPSI de diagnóstico/egreso (inicio/fin). Exporta CSV para tu Dashboard.</p>
+<form id="kpsiForm" class="card">
+  <label>Nombre estudiante <input name="nombre" required/></label><br/><br/>
+  <table style="width:100%" aria-label="KPSI">
+    <thead><tr><th>Ítem</th><th>1 Lo sé</th><th>2 No seguro</th><th>3 No lo entiendo</th><th>4 No lo sé</th></tr></thead>
+    <tbody>
+      <tr><td>Rol de la luz en fotosíntesis</td><td><input type="radio" name="i1" value="1" required/></td><td><input type="radio" name="i1" value="2"/></td><td><input type="radio" name="i1" value="3"/></td><td><input type="radio" name="i1" value="4"/></td></tr>
+      <tr><td>Entrada de CO₂ / H₂O</td><td><input type="radio" name="i2" value="1" required/></td><td><input type="radio" name="i2" value="2"/></td><td><input type="radio" name="i2" value="3"/></td><td><input type="radio" name="i2" value="4"/></td></tr>
+      <tr><td>Producto O₂ / Glucosa</td><td><input type="radio" name="i3" value="1" required/></td><td><input type="radio" name="i3" value="2"/></td><td><input type="radio" name="i3" value="3"/></td><td><input type="radio" name="i3" value="4"/></td></tr>
+    </tbody>
+  </table>
+  <br/>
+  <button class="ctrl" type="button" onclick="exportKPSI()">✅ Exportar CSV</button>
+  <a class="ctrl" href="../docs/KPSI.pdf" target="_blank" rel="noopener">📄 Leer documento base (PDF)</a>
+</form>
+
 </main>
  <footer class="footer">
   <div>📚<strong>© Neotech EduLab — Educación Inmersiva </strong></div>
